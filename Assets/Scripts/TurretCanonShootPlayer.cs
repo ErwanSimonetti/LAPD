@@ -3,6 +3,7 @@ using UnityEngine;
 public class TurretCanonShootPlayer : MonoBehaviour
 {
     public GameObject playerTarget;
+    public float rotationSpeed = 20;
 
     void Start()
     {
@@ -12,7 +13,6 @@ public class TurretCanonShootPlayer : MonoBehaviour
     {
         RaycastHit hit;
         GameObject turretBody = transform.parent.gameObject;
-        // Does the ray intersect any objects excluding the player layer
         if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.up), out hit, 10))
         {
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.up) * hit.distance, Color.red);
@@ -21,7 +21,18 @@ public class TurretCanonShootPlayer : MonoBehaviour
         {
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.up) * 10, Color.green);
         }
-        transform.RotateAround(turretBody.transform.position, Vector3.up, 20 * Time.deltaTime);
-        // transform.LookAt(playerTarget.transform, Vector3.left);
+
+        Vector3 forward = transform.TransformDirection(Vector3.up);
+        Vector3 toOther = playerTarget.transform.position - transform.position;
+
+        float rotation;
+
+        Debug.Log(Vector3.Angle(toOther, forward));
+        if (Vector3.Dot(transform.TransformDirection(Vector3.right), toOther) > 0)
+            rotation = rotationSpeed;
+        else
+            rotation = -rotationSpeed;
+
+        transform.RotateAround(turretBody.transform.position, Vector3.up, rotation * Time.deltaTime);
     }
 }
