@@ -63,7 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets/Scripts/MechMovement.cs" />
-    <Compile Include="Assets/TurretCanonShootPlayer.cs" />
+    <Compile Include="Assets/Scripts/TurretCanonShootPlayer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
