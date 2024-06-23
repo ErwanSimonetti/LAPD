@@ -27,7 +27,6 @@ public class TurretCanonShootPlayer : MonoBehaviour
 
         float rotation;
 
-        Debug.Log(Vector3.Angle(toOther, forward));
         if (Vector3.Dot(transform.TransformDirection(Vector3.right), toOther) > 0)
             rotation = rotationSpeed;
         else

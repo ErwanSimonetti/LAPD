@@ -275,6 +275,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerMech
       objectReference: {fileID: 0}
+    - target: {fileID: 7019574391022958218, guid: 8d505c8ec69d67fe78628ad3dbea470a, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8d505c8ec69d67fe78628ad3dbea470a, type: 3}
 --- !u!1001 &1263480395
@@ -284,6 +288,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2325170999400857992, guid: af82f4fd117c07c1cab4e1a7bb96de9b, type: 3}
+      propertyPath: triggerActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2513314578978929713, guid: af82f4fd117c07c1cab4e1a7bb96de9b, type: 3}
       propertyPath: m_Name
       value: TurretBasic
