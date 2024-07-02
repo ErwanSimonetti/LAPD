@@ -14,7 +14,8 @@ public class TurretBehavior : MonoBehaviour
     {
         cannonController = GetComponentInChildren<TurretCanonShootPlayer>();
         meshRenderers = GetComponentsInChildren<MeshRenderer>();
-        outlineMaterial = new Material(Shader.Find("Custom/Outline"));
+        outlineMaterial = new Material(Shader.Find("Custom/ColoredOutline"));
+        outlineMaterial.SetColor("_OutlineColor", Color.blue);
     }
 
     void Update()
@@ -30,6 +31,7 @@ public class TurretBehavior : MonoBehaviour
         meshRenderers[1].materials = newMaterials;
         meshRenderers[2].materials = newMaterials;
         isNeutral = false;
+        RemoveOutline();
     }
 
     public void OutlineTurret()

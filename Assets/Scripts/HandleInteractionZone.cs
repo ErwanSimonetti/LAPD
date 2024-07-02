@@ -12,7 +12,8 @@ public class HandleInteractionZone : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             triggerActive = true;
-            turretBehavior.OutlineTurret();
+            if (turretBehavior.isNeutral)
+                turretBehavior.OutlineTurret();
         }
     }
 
@@ -21,7 +22,8 @@ public class HandleInteractionZone : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             triggerActive = false;
-            turretBehavior.RemoveOutline();
+            if (turretBehavior.isNeutral)
+                turretBehavior.RemoveOutline();
         }
     }
 
