@@ -34,7 +34,7 @@ public class HandleInteractionZone : MonoBehaviour
 
     void Update()
     {
-        if (triggerActive && Input.GetKeyDown(KeyCode.R))
+        if (triggerActive && Input.GetKeyDown(KeyCode.R)) // use Input universal
         {
             turretBehavior.SwitchToTeam();
         }

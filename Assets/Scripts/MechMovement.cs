@@ -12,15 +12,12 @@ public class MechMovement : MonoBehaviour
     public bool IsGrounded() {
         RaycastHit hit;
         float rayLength = 2f;
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, rayLength)) {
-            return true;
-        }
-        return false;
+        return (Physics.Raycast(transform.position, Vector3.down, out hit, rayLength));
     }
 
     private bool JumpConditionTrue()
     {
-        return IsGrounded() && Input.GetKeyDown(KeyCode.Space);
+        return IsGrounded() && Input.GetKeyDown(KeyCode.Space); // use the Input instead
     }
 
     private void HandleJump()

@@ -1,10 +1,18 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class TurretCanonShootPlayer : MonoBehaviour
 {
     public GameObject playerTarget;
+    public GameObject projectile;
+    public GameObject projectileSpawnPosition;
+    public int projectileSpeed = 10;
+    public float aimingAccuracy = 0.10f;
     public float rotationSpeed = 60;
+    public float delayBetweenShots = 3f;
+    private float lastTimeShot = 0f;
     private GameObject turretBody;
+    private List<GameObject> projectilesShot = new List<GameObject>(); // maybe not use a list and handle all projectiles with component atteched to them
 
     void Start()
     {
@@ -14,6 +22,7 @@ public class TurretCanonShootPlayer : MonoBehaviour
     void Update()
     {
         AimAtPlayer();
+        HandleProjectilesShot();
     }
 
     private void DrawDebugShootingRay()
@@ -32,10 +41,7 @@ public class TurretCanonShootPlayer : MonoBehaviour
         float rotation = 0;
         float dotProduct = Vector3.Dot(transform.TransformDirection(Vector3.right), toOther);
 
-        if (dotProduct < 0.02 && dotProduct > -0.02) {
-            ShootProjectile();
-        }
-        else if (dotProduct > 0)
+        if (dotProduct > 0)
             rotation = rotationSpeed;
         else
             rotation = -rotationSpeed;
@@ -49,10 +55,7 @@ public class TurretCanonShootPlayer : MonoBehaviour
         float rotation = 0;
         float dotProduct = Vector3.Dot(transform.TransformDirection(Vector3.forward), toOther);
 
-        if (dotProduct < 0.02 && dotProduct > -0.02) {
-            ShootProjectile();
-        }
-        else if (dotProduct > 0)
+        if (dotProduct > 0)
             rotation = rotationSpeed;
         else
             rotation = -rotationSpeed;
@@ -70,20 +73,35 @@ public class TurretCanonShootPlayer : MonoBehaviour
     private void HandleTurretRotation()
     {
         float dotHorizontal = HandleHorizontalRotation();
+        float dotVertical = -1;
+        bool readyHorizontal = false;
+        bool readyVertical = false;
 
-        if (!IsEnemyBehind() && dotHorizontal > -0.75 && dotHorizontal < 0.75)
-            HandleVerticalRotation();
+        if (readyHorizontal = (!IsEnemyBehind() && dotHorizontal > -(aimingAccuracy) && dotHorizontal < aimingAccuracy))
+            dotVertical = HandleVerticalRotation();
+        
+        readyVertical = (!IsEnemyBehind() && dotVertical > -(aimingAccuracy) && dotVertical < aimingAccuracy);
+        if (readyHorizontal && readyVertical)
+            ShootProjectile();
     }
 
     private void AimAtPlayer()
     {
         HandleTurretRotation();
-        DrawDebugShootingRay();
+    }
 
+    private void HandleProjectilesShot()
+    {
+        for (int i = 0; i < projectilesShot.Count; i += 1) {
+            projectilesShot[i].transform.Translate(Vector3.forward * Time.deltaTime * projectileSpeed);
+        }
     }
 
     private void ShootProjectile()
     {
-
+        if (lastTimeShot == 0 || Time.time - delayBetweenShots > lastTimeShot) {
+            projectilesShot.Add(Instantiate(projectile, projectileSpawnPosition.transform.position, projectileSpawnPosition.transform.rotation));
+            lastTimeShot = Time.time;
+        }
     }
 }
