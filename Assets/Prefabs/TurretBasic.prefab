@@ -113,11 +113,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8a93670f8ef9bbc7b0af08a5e2c56dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerTarget: {fileID: 0}
+  target: {fileID: 0}
   projectile: {fileID: 4298119090543435760, guid: b53298c42b8ab3349a43a0f9a3a53ed3, type: 3}
-  projectileSpawnPosition: {fileID: 721259873996796950}
-  projectileSpeed: 8
-  aimingAccuracy: 0.1
+  projectileSpawnLocation: {fileID: 721259873996796950}
+  aimingAccuracy: 0.05
   rotationSpeed: 150
   delayBetweenShots: 2.5
 --- !u!1 &721259873996796950
@@ -245,7 +244,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1839247727454551397}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.12, y: 1.31, z: 0.6022169}
+  m_LocalPosition: {x: 0, y: 1.08, z: 0}
   m_LocalScale: {x: 4.427824, y: 3.603743, z: 5.2394047}
   m_ConstrainProportionsScale: 0
   m_Children: []

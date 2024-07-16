@@ -3,26 +3,32 @@ using System.Collections.Generic;
 
 public class TurretCanonShootPlayer : MonoBehaviour
 {
-    public GameObject playerTarget;
+    public GameObject target;
     public GameObject projectile;
-    public GameObject projectileSpawnPosition;
-    public int projectileSpeed = 10;
+    public GameObject projectileSpawnLocation;
     public float aimingAccuracy = 0.10f;
     public float rotationSpeed = 60;
     public float delayBetweenShots = 3f;
     private float lastTimeShot = 0f;
     private GameObject turretBody;
-    private List<GameObject> projectilesShot = new List<GameObject>(); // maybe not use a list and handle all projectiles with component atteched to them
+    private Vector3 predictedTargetPosition;
+    private float projectileTimeToTarget = 1f;
+    private int projectileSpeed = 10;
+    private float distanceToTarget = 0f;
 
     void Start()
     {
         turretBody = transform.parent.gameObject;
+        predictedTargetPosition = target.transform.position;
+        projectileSpeed = projectile.GetComponentInChildren<HandleProjectileCollisions>().getProjectileSpeed();
     }
 
     void Update()
     {
+        distanceToTarget = Vector3.Distance(target.transform.position, transform.position);
+        projectileTimeToTarget = distanceToTarget / projectileSpeed;
+        predictedTargetPosition = target.GetComponent<MovementChecker>().PredictFuturePosition(projectileTimeToTarget);
         AimAtPlayer();
-        HandleProjectilesShot();
     }
 
     private void DrawDebugShootingRay()
@@ -37,10 +43,12 @@ public class TurretCanonShootPlayer : MonoBehaviour
 
     private float HandleHorizontalRotation()
     {
-        Vector3 toOther = playerTarget.transform.position - transform.position;
+        Vector3 toOther = predictedTargetPosition - transform.position;
         float rotation = 0;
         float dotProduct = Vector3.Dot(transform.TransformDirection(Vector3.right), toOther);
 
+        if (dotProduct < aimingAccuracy && dotProduct > -(aimingAccuracy))
+            return(dotProduct);
         if (dotProduct > 0)
             rotation = rotationSpeed;
         else
@@ -51,10 +59,12 @@ public class TurretCanonShootPlayer : MonoBehaviour
 
     private float HandleVerticalRotation()
     {
-        Vector3 toOther = playerTarget.transform.position - transform.position;
+        Vector3 toOther = target.transform.position - transform.position;
         float rotation = 0;
         float dotProduct = Vector3.Dot(transform.TransformDirection(Vector3.forward), toOther);
 
+        if (dotProduct < aimingAccuracy && dotProduct > -(aimingAccuracy))
+            return(dotProduct);
         if (dotProduct > 0)
             rotation = rotationSpeed;
         else
@@ -65,7 +75,7 @@ public class TurretCanonShootPlayer : MonoBehaviour
 
     private bool IsEnemyBehind()
     {
-        Vector3 enemyDirectionLocal = transform.InverseTransformPoint(playerTarget.transform.position);
+        Vector3 enemyDirectionLocal = transform.InverseTransformPoint(predictedTargetPosition);
 
         return (enemyDirectionLocal.y < 0);
     }
@@ -90,17 +100,10 @@ public class TurretCanonShootPlayer : MonoBehaviour
         HandleTurretRotation();
     }
 
-    private void HandleProjectilesShot()
-    {
-        for (int i = 0; i < projectilesShot.Count; i += 1) {
-            projectilesShot[i].transform.Translate(Vector3.forward * Time.deltaTime * projectileSpeed);
-        }
-    }
-
     private void ShootProjectile()
     {
         if (lastTimeShot == 0 || Time.time - delayBetweenShots > lastTimeShot) {
-            projectilesShot.Add(Instantiate(projectile, projectileSpawnPosition.transform.position, projectileSpawnPosition.transform.rotation));
+            Instantiate(projectile, projectileSpawnLocation.transform.position, projectileSpawnLocation.transform.rotation);
             lastTimeShot = Time.time;
         }
     }
